@@ -112,6 +112,7 @@ var start = function () {
 		var dataToSend = JSON.stringify(toSend);
 		for (var c = 0; c < clients.length; c++) {
 			try {
+				console.log('data to send is', dataToSend)
 				clients[c].send(dataToSend);
 			} catch (error) {
 				console.log("Error sending: ", error);
