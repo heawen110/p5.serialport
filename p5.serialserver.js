@@ -30,15 +30,14 @@ var start = function () {
 	var WebSocketServer = require('ws').Server;
 	wss = new WebSocketServer({perMessageDeflate: false, port: SERVER_PORT});
 
-	const openSerials = function(serialPorts, serialOptionsList) {
+	const openSerial = function(serialPortAddress, serialPortOptions) {
 
+		var previousPortIndex = _.findIndex(serialPortList, (p) => p.serialport === serialPortAddress)
+		var previousPort = serialPortList[previousPortIndex]
+		var index = previousPortIndex === -1 ? serialPortList.length : previousPortIndex;
+		logit("openSerial: " + serialPortAddress);
 
-		_.each(serialPorts, (serialPortAddress, index)=> {
-			const previousPort = _.find(serialPortList, {serialport: serialPortAddress})
-			const serialPortOptions = serialOptionsList[index];
-			logit("openSerial: " + serialPorts, index);
-
-			if (previousPort == null || previousPort.isOpen() == false) {
+			if (previousPortIndex === -1 || previousPort.isOpen() == false) {
 				if (!serialPortOptions.hasOwnProperty('autoOpen')) {
 					serialPortOptions.autoOpen = false;
 				}
@@ -78,12 +77,12 @@ var start = function () {
 						sendit({method:'openserial',data:{}, portIndex: index});
 					}
 				});
+				serialPortList.splice(index, 1, serialPort);
 			} else {
 				sendit({method:'error', data:"Already open", portIndex: index});
 				logit("serialPort is already open");
 				sendit({method:'openserial',data:{}, portIndex: index});
 			}
-		})
 	}
 
 	var closeSerial = function(index) {
@@ -165,7 +164,7 @@ var start = function () {
 						if (typeof message.data.serialport === 'string') {
 							logit("new SerialPort.SerialPort");
 
-							openSerials([message.data.serialport], [message.data.serialoptions]);
+							openSerial(message.data.serialport, message.data.serialoptions);
 
 						} else {
 							logit("User didn't specify a port to open");
