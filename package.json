@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "lodash": "^4.17.11",
-    "serialport": "^4.0.3",
+    "serialport": "^7.0.2",
     "ws": "^1.1.1"
   },
   "license": "GPL"
