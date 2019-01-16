@@ -72,7 +72,7 @@ var start = function () {
 					logit("serialPort.open", index);
 
 					if ( err ) {
-						sendit({method:'error', data:"Couldn't open port: " + serialport, portIndex: index});
+						sendit({method:'error', data:"Couldn't open port: " + serialPort.path, portIndex: index});
 					} else {
 						sendit({method:'openserial',data:{}, portIndex: index});
 					}
