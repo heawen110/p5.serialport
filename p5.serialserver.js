@@ -32,12 +32,12 @@ var start = function () {
 
 	const openSerial = function(serialPortAddress, serialPortOptions) {
 
-		var previousPortIndex = _.findIndex(serialPortList, (p) => p.serialport === serialPortAddress)
+		var previousPortIndex = _.findIndex(serialPortList, (p) => p.path === serialPortAddress)
 		var previousPort = serialPortList[previousPortIndex]
 		var index = previousPortIndex === -1 ? serialPortList.length : previousPortIndex;
 		logit("openSerial: " + serialPortAddress);
 
-			if (previousPortIndex === -1 || previousPort.isOpen() == false) {
+			if (previousPortIndex === -1 || previousPort.isOpen === false) {
 				if (!serialPortOptions.hasOwnProperty('autoOpen')) {
 					serialPortOptions.autoOpen = false;
 				}
@@ -87,7 +87,7 @@ var start = function () {
 
 	var closeSerial = function(index) {
 		const serialPort = serialPortList[index]
-		if (serialPort != null && serialPort.isOpen()) {
+		if (serialPort != null && serialPort.isOpen) {
 			logit("serialPort != null && serialPort.isOpen so close", index);
 			logit("serialPort.flush, drain, close", index);
 
@@ -177,7 +177,7 @@ var start = function () {
 
 					} else if (message.method === "close") {
 						logit("message.method === close", message.portAddress);
-						const index = _.findIndex(serialPortList, (p)=> p.serialport === message.portAddress)
+						const index = _.findIndex(serialPortList, (p)=> p.path === message.portAddress)
 						if(index !== -1)
 							closeSerial(index);
 					}
@@ -214,7 +214,7 @@ var stop = function() {
 	logit("stop()");
 
 	_.forEach(serialPortList, (serialPort, index)=>{
-		if (serialPort != null && serialPort.isOpen()) {
+		if (serialPort != null && serialPort.isOpen) {
 			logit("serialPort != null && serialPort.isOpen() is true", index);
 			logit("serialPort.flush, drain, close", index);
 
@@ -247,7 +247,7 @@ var stop = function() {
 		}
 
 		// Let's try to close a different way
-		if (serialPort != null && serialPort.isOpen()) {
+		if (serialPort != null && serialPort.isOpen) {
 			logit("serialPort != null && serialPort.isOpen() is true so serialPort = null");
 			serialPort = null;
 		}
