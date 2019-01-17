@@ -173,9 +173,7 @@ var start = function () {
 						}
 
 					} else if (message.method === "write") {
-						
-						serialPort.write(message.data);
-
+						_.forEach(serialPortList, (serialPort)=>serialPort.write(message.data))
 					} else if (message.method === "close") {
 						logit("message.method === close", message.portAddress);
 						const index = _.findIndex(serialPortList, (p)=> p.path === message.portAddress)
